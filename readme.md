@@ -14,7 +14,7 @@ as neither of them is volatile
 
 #### Running the service
 
-To run the service, simple run the module 
+To run the service, simply run the module 
 ```python
 request_augment_service.py
 ```
