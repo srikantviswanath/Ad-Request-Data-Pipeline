@@ -2,19 +2,20 @@ import json
 
 import requests
 from external.external_endpoints import SITE_DEMOGRAPHICS_URL, GEO_IP_COUNTRY_LOOK_UP, PUBLISHER_LOOK_UP
-from utils import memoize
+from utils import timed_memoize
 
+ONE_DAY = 86400  # seconds
 
 # GET
 
-@memoize
+@timed_memoize(ONE_DAY)
 def get_site_demographics(site_id):
     req = requests.get(SITE_DEMOGRAPHICS_URL.format(site_id=site_id))
     if req.status_code == 200:
         return json.loads(req.content.decode('utf8')).get('demographics')
 
 
-@memoize
+@timed_memoize(ONE_DAY)
 def get_country_by_device_ip(ip):
     geo_data = requests.get(
         GEO_IP_COUNTRY_LOOK_UP.format(ip_address=ip), auth=('136413', 'nZOHRkQ4kYuG')
@@ -25,7 +26,7 @@ def get_country_by_device_ip(ip):
 
 # POST
 
-@memoize
+@timed_memoize(ONE_DAY)
 def publisher_details_by_site_id(site_id):
     post_req = {
         'q': {

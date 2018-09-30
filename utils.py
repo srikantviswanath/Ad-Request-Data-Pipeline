@@ -19,15 +19,23 @@ def timeit(desc=''):
     return time_decorator
 
 
-def memoize(func):
-    cache = expiringdict.ExpiringDict(10 ** 7, 86400)
+def timed_memoize(ttl, cache_size=10**7):
+    """
+    Timed cache. After expiry of :ttl: wrapped function's input args will be evicted
+    :param int ttl: Time to live in seconds
+    :param int cache_size: number of keys the cache can hold
+    :return: 
+    """
+    cache = expiringdict.ExpiringDict(cache_size, ttl)
 
-    def memoized_func(*args):
-        if args in cache:
-            return cache[args]
-        result = func(*args)
-        cache[args] = result
-        return result
+    def wrapper(func):
+        def memoized_func(*args):
+            if args in cache:
+                return cache[args]
+            result = func(*args)
+            cache[args] = result
+            return result
+        return memoized_func
 
-    return memoized_func
+    return wrapper
 
