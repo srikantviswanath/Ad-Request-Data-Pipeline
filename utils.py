@@ -4,7 +4,7 @@ import expiringdict
 
 
 def timeit(desc=''):
-
+    """Simple decorator to compute time of wrapped function"""
     def time_decorator(func):
 
         def wrapper(*args, **kwargs):
@@ -24,7 +24,7 @@ def timed_memoize(ttl, cache_size=10**7):
     Timed cache. After expiry of :ttl: wrapped function's input args will be evicted
     :param int ttl: Time to live in seconds
     :param int cache_size: number of keys the cache can hold
-    :return: 
+    :return:
     """
     cache = expiringdict.ExpiringDict(cache_size, ttl)
 

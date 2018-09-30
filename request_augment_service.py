@@ -43,7 +43,7 @@ def inject_device_country(request_dict):
     return request_dict
 
 
-INDIVIDUAL_PROCESSING_UNITS = (
+INDIVIDUAL_PROCESSING_UNITS = (  # configurable pipeline
     inject_device_country,
     inject_site_demographics,
     inject_publisher_details
@@ -53,6 +53,7 @@ INDIVIDUAL_PROCESSING_UNITS = (
 @app.route('/', methods=['POST'])
 @timeit('E2E pipeline')
 def augment_ad_request():
+    """Entry point of data pipeline service"""
     req_data = request.get_json()
     for ipu in INDIVIDUAL_PROCESSING_UNITS:
         req_data = ipu(req_data)
