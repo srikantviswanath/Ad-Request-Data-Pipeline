@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, request
+from flask import Flask, request, abort
 
 from external.external_requests import (
     get_site_demographics,
@@ -25,8 +25,9 @@ def inject_site_demographics(request_dict):
 def inject_publisher_details(request_dict):
     site_id = request_dict['site']['id']
     pub_details = publisher_details_by_site_id(site_id)
-    if pub_details:
-        request_dict['site']['publisher'] = pub_details
+    if not pub_details or not pub_details.get('id'):
+        abort(400, 'Publisher ID could not be eshtablished')
+    request_dict['site']['publisher'] = pub_details
     return request_dict
 
 
@@ -35,7 +36,10 @@ def inject_device_country(request_dict):
     ip = request_dict['device']['ip']
     country = get_country_by_device_ip(ip)
     if country:
-        request_dict['device']['country'] = country
+        if country == 'US':
+            request_dict['device']['country'] = country
+        else:
+            abort(400, 'You are trying to access from outside US')
     return request_dict
 
 
