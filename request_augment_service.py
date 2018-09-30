@@ -15,21 +15,27 @@ app = Flask(__name__)
 @timeit('fetching site demographics')
 def inject_site_demographics(request_dict):
     site_id = request_dict['site']['id']
-    request_dict['site']['demographics'] = get_site_demographics(site_id)
+    demographics = get_site_demographics(site_id)
+    if demographics:
+        request_dict['site']['demographics'] = demographics
     return request_dict
 
 
 @timeit('fetching publisher details by site id')
 def inject_publisher_details(request_dict):
     site_id = request_dict['site']['id']
-    request_dict['site']['publisher'] = publisher_details_by_site_id(site_id)
+    pub_details = publisher_details_by_site_id(site_id)
+    if pub_details:
+        request_dict['site']['publisher'] = pub_details
     return request_dict
 
 
 @timeit('fetching country of device ip')
 def inject_device_country(request_dict):
     ip = request_dict['device']['ip']
-    request_dict['device']['country'] = get_country_by_device_ip(ip)
+    country = get_country_by_device_ip(ip)
+    if country:
+        request_dict['device']['country'] = country
     return request_dict
 
 
