@@ -78,5 +78,9 @@ Better network reception brought down the mean of end-to-end latency to **~484ms
 
 ![histogram end-to-en latency](latency_histogram.png)
 
+#### Over an extended period of time
+If any combination of the request or the entore request itself is repeated, due to caching
+of the individual processing units, the response time comes down to **~0.5ms - 180 ms**
+
 
 
