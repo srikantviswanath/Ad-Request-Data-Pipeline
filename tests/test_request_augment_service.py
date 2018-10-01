@@ -5,7 +5,8 @@ import request_augment_service as ras
 class TestAdRequestAugmentService(unittest.TestCase):
 
     @mock.patch('request_augment_service.get_site_demographics', return_value={'female_pct': 45.5, 'male_pct': 55.5})
-    def test_inject_site_demographics_200_response(self, mock_site_demo):
+    def test_inject_site_demographics_200_success_response(self, mock_site_demo):
+        """accessing demographics endpoint that returns 200 response code"""
         input_req = {
             'site': {
                 'id': 'id1'

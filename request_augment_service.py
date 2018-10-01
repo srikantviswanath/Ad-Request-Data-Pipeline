@@ -51,7 +51,7 @@ INDIVIDUAL_PROCESSING_UNITS = (  # configurable pipeline
 
 
 @app.route('/', methods=['POST'])
-@timeit('E2E pipeline')
+@timeit('E2E pipeline', 'E2ETime.txt')
 def augment_ad_request():
     """Entry point of data pipeline service"""
     req_data = request.get_json()

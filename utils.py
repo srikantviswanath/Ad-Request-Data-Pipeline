@@ -1,10 +1,13 @@
 import time
 
-import expiringdict
 
-
-def timeit(desc=''):
-    """Simple decorator to compute time of wrapped function"""
+def timeit(desc='', persist_to_log=''):
+    """
+    Simple decorator to compute time of wrapped function
+    :param str optional desc: Description of the wrapped function. If not provided uses the wrapped function name
+    :param str optional persist_to_log: if provided, write the time computed to the text file
+    :return:
+    """
     def time_decorator(func):
 
         def wrapper(*args, **kwargs):
@@ -12,30 +15,13 @@ def timeit(desc=''):
             response = func(*args, **kwargs)
             time_taken_ms = (time.time() - start) * 1000
             print('Time taken for %s: %s ms' % (desc if desc else func.__name__, time_taken_ms))
+            if persist_to_log:
+                with open(persist_to_log, 'a+') as f:
+                    f.write(str(time_taken_ms) + ' ')
             return response
 
         return wrapper
 
     return time_decorator
 
-
-def timed_memoize(ttl, cache_size=10**7):
-    """
-    Timed cache. After expiry of :ttl: wrapped function's input args will be evicted
-    :param int ttl: Time to live in seconds
-    :param int cache_size: number of keys the cache can hold
-    :return:
-    """
-    cache = expiringdict.ExpiringDict(cache_size, ttl)
-
-    def wrapper(func):
-        def memoized_func(*args):
-            if args in cache:
-                return cache[args]
-            result = func(*args)
-            cache[args] = result
-            return result
-        return memoized_func
-
-    return wrapper
 
